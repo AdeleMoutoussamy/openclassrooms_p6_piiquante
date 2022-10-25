@@ -1,10 +1,14 @@
 // J'importe express
-const express = require("express");
+const express = require('express');
 // J'importe mongoose
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+// Accéder au path de notre serveur
+const path = require('path');
 require('dotenv').config();
+
 // J'importe le router
 const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce');
 
 // J'appel la méthode express pour créer une application
 const app = express();
@@ -28,7 +32,11 @@ app.use((req, res, next) =>
 // middleware qui intercépte toutes les requêtes qui contiennent du json
 app.use(express.json());
 
+// Express gére la ressource images de manière statique 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/auth', userRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 // J'exporte app
 module.exports = app;
