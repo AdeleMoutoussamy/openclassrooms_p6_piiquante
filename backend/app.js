@@ -1,26 +1,35 @@
-// J'importe express
+// J'importe Express
 const express = require('express');
-// J'importe mongoose
+// J'importe Mongoose
 const mongoose = require('mongoose');
 // Accéder au path de notre serveur
 const path = require('path');
+// J'importe Helmet
+const helmet = require('helmet');
+// J'importe Express Mongo Sanitize
+const expressMongoSanitize = require('express-mongo-sanitize');
+
 require('dotenv').config();
 
-// J'importe le router
+// J'importe les router
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
-// J'appel la méthode express pour créer une application
+// J'appelle la méthode express() pour créer une application Express.
 const app = express();
 
+// Pour se connecté à MongoDB.
 mongoose.connect(process.env.DBLINK,
-  { useNewUrlParser: true,
-    useUnifiedTopology: true 
-  })
-  .then(() => console.log("Connexion à MongoDB réussie !"))
-  .catch(() => console.log("Connexion à MongoDB échouée !"));
+{ 
+  useNewUrlParser: true,
+  useUnifiedTopology: true 
+})
+.then(() => console.log("Connexion à MongoDB réussie !"))
+.catch(() => console.log("Connexion à MongoDB échouée !"));
 
-// Rajout des headers pour sécuriser l'utilisation de l'API
+app.use(helmet());
+
+// Ceci va permettre à notre application d'accéder l'API sans problème.
 app.use((req, res, next) =>
 {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -29,7 +38,12 @@ app.use((req, res, next) =>
   next();
 });
 
-// middleware qui intercépte toutes les requêtes qui contiennent du json
+app.use(
+  expressMongoSanitize({
+    replaceWith: "_",
+  })
+);
+
 app.use(express.json());
 
 // Express gére la ressource images de manière statique 

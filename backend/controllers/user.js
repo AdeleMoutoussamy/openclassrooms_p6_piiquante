@@ -16,24 +16,24 @@ exports.signup = (req, res, next) =>
         {
             const error = { message: " Veuillez rentrer un email valide ! ex: jean@gmail.com " };
             res.status(401).json(error);
-        }
 
-        if (req.badPassword && req.badPassword == 1)
+        } else if (req.badPassword && req.badPassword == 1)
         {
             const error = { message: " Le mot de passe doit faire au minimum 6 caractères et maximum 20 caractères, avec au moins une majuscule, une minuscule et deux chiffres maximum " };
             res.status(401).json(error);
+
+        } else {
+            const user = new User
+            ({
+                email: req.body.email,
+                password: hash
+            });
+
+            // Enregistre l'objet dans la base de données.
+            user.save()
+            .then(() => res.status(201).json({ message: " Utilisateur créé ! " }))
+            .catch(error => res.status(400).json({ error }));
         }
-
-        const user = new User
-        ({
-            email: req.body.email,
-            password: hash
-        });
-
-        // Enregistre l'objet dans la base de données
-        user.save()
-        .then(() => res.status(201).json({ message: " Utilisateur créé ! " }))
-        .catch(error => res.status(400).json({ error }));
     })
     .catch(error =>
     { 

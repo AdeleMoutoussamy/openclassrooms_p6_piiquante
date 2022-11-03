@@ -1,6 +1,6 @@
 const emailSchema = require('validator');
 
-const emailSchema = (req, res, next) =>
+module.exports = (req, res, next) =>
 {
     if (!emailSchema.isEmail(req.body.email))
     {

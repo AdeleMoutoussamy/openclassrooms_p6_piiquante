@@ -2,7 +2,7 @@ const multer = require('multer');
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
-  'image/jpeg': 'jpg',
+  'image/jpeg': 'jpeg',
   'image/png': 'png'
 };
 
@@ -18,9 +18,11 @@ const storage = multer.diskStorage
     filename: (req, file, callback) =>
     {
         const name = file.originalname.split(' ').join('_');
+        // Pour résoudre l'extension de fichier appropriée
         const extension = MIME_TYPES[file.mimetype];
         callback(null, name + Date.now() + '.' + extension);
     }
 });
 
+// J'exporte multer, je lui passe la const storage et lui indique qu'on gére uniquement les téléchargements de fichiers image
 module.exports = multer({storage}).single('image');

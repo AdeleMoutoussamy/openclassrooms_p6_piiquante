@@ -1,9 +1,9 @@
-// require est la commande pour importer le package
+// Require est la commande pour importer un package
 const http = require('http');
 // J'importe app.js
 const app = require('./app');
 
-// La fonction normalizePort renvoie un port valide
+// La fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne.
 const normalizePort = val =>
 {
   const port = parseInt(val, 10);
@@ -19,10 +19,11 @@ const normalizePort = val =>
   return false;
 };
 const port = normalizePort(process.env.PORT || '3000');
-// Sur quelle port app va tourner
+
+// Je dis à l'application Express sur quel Port elle va tournée.
 app.set('port', port);
 
-// La fonction errorHandler recherche les différentes erreurs et les gères de manière appropriée
+// La fonction errorHandler recherche les différentes erreurs et les gères de manière appropriée.
 const errorHandler = error =>
 {
     if (error.syscall !== 'listen')
@@ -46,15 +47,15 @@ const errorHandler = error =>
   }
 };
 
-// La fonction app sera appelé à chaque requête reçu par le serveur
+// La fonction app sera appelée à chaque requête reçu par le serveur
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
 server.on('listening', () =>
 {
-    const address = server.address();
-    const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
-    console.log('Listening on ' + bind);
+  const address = server.address();
+  const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
+  console.log('Listening on ' + bind);
 });
 
 // Le serveur écoute les requêtes
